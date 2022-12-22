@@ -10,8 +10,8 @@ class RecognClass:
 
     def __init__(self, filename):
         self.filename = filename
-        self.delta = 20
-        self.size = 15
+        self.delta = 10
+        self.size = 50
         self.matrix = []
         self.binary_matrix = []
         self.avg_vector = []
@@ -19,13 +19,14 @@ class RecognClass:
         self.lower_limit = []
         self.etalon_vector = []
         self.perfect_radius = 0
-        # self.neighbor_id = 0
         self.neighbor = 0
+        # self.neighbor_id = 0
 
     def image_to_matrix(self):
         """Convert image to matrix with values of pixel RGBs"""
         image = Image.open(self.filename).convert("L")
         alist = list(image.getdata())
+        print(alist)
         length = len(alist)
         self.matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
         return [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
@@ -79,6 +80,7 @@ class RecognClass:
                 else:
                     counter_1[index] += 1
                 index += 1
+
         for i, j in zip(counter_0, counter_1):
             if i > j:
                 etalon.append(0)
