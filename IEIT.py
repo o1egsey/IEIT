@@ -67,12 +67,13 @@ class IEIT:
                     d1_b = t_d1 - t_betta
                     kfe = d1_b * math.log((1.0 + d1_b + 0.1) / (1.0 - d1_b + 0.1)) / math.log(2.0)
 
+
                     if t_d1 >= 0.5 > t_betta:
                         radius_dict[radius] = [True, kfe]
-                        csvwriter.writerow([radius, 'True', kfe])
+                        csvwriter.writerow([radius, 'True', kfe, t_betta, t_d1])
                     else:
                         radius_dict[radius] = [False, kfe]
-                        csvwriter.writerow([radius, 'False', kfe])
+                        csvwriter.writerow([radius, 'False', kfe, t_betta, t_d1])
 
                     radius += 1
                 # print(radius_dict)

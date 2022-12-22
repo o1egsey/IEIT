@@ -24,11 +24,18 @@ class RecognClass:
 
     def image_to_matrix(self):
         """Convert image to matrix with values of pixel RGBs"""
-        image = Image.open(self.filename).convert("L")
+        image = Image.open(self.filename)
         alist = list(image.getdata())
-        print(alist)
         length = len(alist)
         self.matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
+        matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
+        new_matrix = []
+        for row in matrix:
+            new_row = []
+            for rgb in row:
+                new_row.append(round((rgb[0] + rgb[1] + rgb[2])/3))
+            new_matrix.append(new_row)
+        print(new_matrix)
         return [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
 
     def get_avg_vector(self):
