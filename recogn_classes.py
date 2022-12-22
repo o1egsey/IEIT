@@ -11,7 +11,7 @@ class RecognClass:
     def __init__(self, filename):
         self.filename = filename
         self.delta = 20
-        self.size = 50
+        self.size = 15
         self.matrix = []
         self.binary_matrix = []
         self.avg_vector = []
@@ -67,8 +67,8 @@ class RecognClass:
 
     def get_etalon_vector(self):
         """Returns etalon vector for binary matrix"""
-        counter_0 = [0] * 50
-        counter_1 = [0] * 50
+        counter_0 = [0] * self.size
+        counter_1 = [0] * self.size
         etalon = []
 
         for row in self.binary_matrix:

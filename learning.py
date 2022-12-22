@@ -1,11 +1,11 @@
 from recogn_classes import RecognClass
 from IEIT import IEIT
 
-forest_class = RecognClass('images/forest.png')
-field_class = RecognClass('images/field.png')
-road_class = RecognClass('images/road.png')
+water = RecognClass('photos/water15x15.png')
+sand = RecognClass('photos/sand15x15.png')
+grass = RecognClass('photos/grass15x15.png')
 
-classes = [forest_class, field_class, road_class]
+classes = [water, sand, grass]
 
 for clas in classes:
     clas.image_to_matrix()
@@ -18,3 +18,7 @@ for clas in classes:
 ieit = IEIT(classes)
 ieit.get_neighbors()
 ieit.optimize_radius()
+
+for clas in classes:
+    print(clas.perfect_radius)
+    print(clas.etalon_vector)
