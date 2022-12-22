@@ -41,7 +41,7 @@ class IEIT:
 
             cl.neighbor = min(cl_distances_dict, key=cl_distances_dict.get)
             # print(f"Neighbor of class {cl} is : {min(cl_distances_dict, key=cl_distances_dict.get)}")
-            #
+
             # print(cl_distances_dict)
 
     def optimize_radius(self):
@@ -53,7 +53,7 @@ class IEIT:
                 radius_dict = {}
                 true_area_radiuses = {}
 
-                for x in range(16):
+                for x in range(51):
                     k1 = 0
                     k3 = 0
                     for i in range(cl.size):
@@ -75,7 +75,7 @@ class IEIT:
                         csvwriter.writerow([radius, 'False', kfe])
 
                     radius += 1
-                print(radius_dict)
+                # print(radius_dict)
                 for key, value in radius_dict.items():
                     if value[0] is True:
                         true_area_radiuses[key] = value[1]
@@ -83,69 +83,69 @@ class IEIT:
                 perfect_radius = max(true_area_radiuses, key=true_area_radiuses.get, default=0)
                 cl.perfect_radius = perfect_radius
 
-    def optimize_delta(self, max_delta=50):
-        """Method for optimization delta. It takes max delta, as param.
-            Then for every value of delta it is calculating new limits, new binary matrix, etalon, neighbors, perfect
-            radius and then calculate KFE for this delta.
-
-            To-do: needed to implement algorithm for getting perfect delta automatically.
-        """
-        filename = 'deltas.csv'
-        fields = ['Delta', 'Working area', 'KFE']
-        with open(filename, 'w') as f:
-            csvwriter = csv.writer(f)
-            class_index = 0
-            true_delta_dict = {}
-            list_of_deltas = []
-
-            for cl in self.classes:
-                print(f"Class #{class_index}")
-                for delta in range(1, max_delta):
-                    cl.delta = delta
-                    cl.get_limits()
-                    cl.matrix_to_binary()
-                    cl.get_etalon_vector()
-                    IEIT.get_neighbors(self)
-                    IEIT.optimize_radius(self)
-
-                    delta_table = PrettyTable(['Delta', 'Working Area', 'KFE'])
-
-                    k1 = 0
-                    k3 = 0
-                    for i in range(cl.size):
-                        if IEIT.calculate_distance(cl.etalon_vector, cl.get_vector(i)) <= cl.perfect_radius:
-                            k1 += 1
-                        if IEIT.calculate_distance(cl.etalon_vector, cl.neighbor.get_vector(i)) <= cl.perfect_radius:
-                            k3 += 1
-                    t_d1 = k1 / 50
-                    t_betta = k3 / 50
-                    d1_b = t_d1 - t_betta
-                    kfe = d1_b * math.log((1.0 + d1_b + 0.1) / (1.0 - d1_b + 0.1)) / math.log(2.0)
-
-                    if t_d1 >= 0.5 > t_betta:
-                        delta_table.add_row([delta, 'True', kfe])
-                        csvwriter.writerow([delta, 'True', kfe])
-                        true_delta_dict[delta] = kfe
-                    else:
-                        delta_table.add_row([delta, 'False', kfe])
-                        csvwriter.writerow([delta, 'False', kfe])
-
-                    # print(radius_table)
-                    print(delta_table)
-                class_index += 1
-                # print(true_delta_dict)
-                # new_dict = {}
-                # for k, v in true_delta_dict.items():
-                #     if 1 <= k <= 8 or 17 <= k <= 22:
-                #         # new_dict[k] = v
-                #         list_of_deltas.append([k, v])
-                #         # if k in list_of_deltas:
-                #         #     list_of_deltas[k] += v
-                #         # else:
-                #         #     list_of_deltas.append([k, v])
-                # # print(new_dict)
-                # print(list_of_deltas)
-                # # new_dict.clear()
-                # list_of_deltas.clear()
-                true_delta_dict = {}
-            # print(list_of_deltas)
+    # def optimize_delta(self, max_delta=50):
+    #     """Method for optimization delta. It takes max delta, as param.
+    #         Then for every value of delta it is calculating new limits, new binary matrix, etalon, neighbors, perfect
+    #         radius and then calculate KFE for this delta.
+    #
+    #         To-do: needed to implement algorithm for getting perfect delta automatically.
+    #     """
+    #     filename = 'deltas.csv'
+    #     fields = ['Delta', 'Working area', 'KFE']
+    #     with open(filename, 'w') as f:
+    #         csvwriter = csv.writer(f)
+    #         class_index = 0
+    #         true_delta_dict = {}
+    #         list_of_deltas = []
+    #
+    #         for cl in self.classes:
+    #             print(f"Class #{class_index}")
+    #             for delta in range(1, max_delta):
+    #                 cl.delta = delta
+    #                 cl.get_limits()
+    #                 cl.matrix_to_binary()
+    #                 cl.get_etalon_vector()
+    #                 IEIT.get_neighbors(self)
+    #                 IEIT.optimize_radius(self)
+    #
+    #                 delta_table = PrettyTable(['Delta', 'Working Area', 'KFE'])
+    #
+    #                 k1 = 0
+    #                 k3 = 0
+    #                 for i in range(cl.size):
+    #                     if IEIT.calculate_distance(cl.etalon_vector, cl.get_vector(i)) <= cl.perfect_radius:
+    #                         k1 += 1
+    #                     if IEIT.calculate_distance(cl.etalon_vector, cl.neighbor.get_vector(i)) <= cl.perfect_radius:
+    #                         k3 += 1
+    #                 t_d1 = k1 / 50
+    #                 t_betta = k3 / 50
+    #                 d1_b = t_d1 - t_betta
+    #                 kfe = d1_b * math.log((1.0 + d1_b + 0.1) / (1.0 - d1_b + 0.1)) / math.log(2.0)
+    #
+    #                 if t_d1 >= 0.5 > t_betta:
+    #                     delta_table.add_row([delta, 'True', kfe])
+    #                     csvwriter.writerow([delta, 'True', kfe])
+    #                     true_delta_dict[delta] = kfe
+    #                 else:
+    #                     delta_table.add_row([delta, 'False', kfe])
+    #                     csvwriter.writerow([delta, 'False', kfe])
+    #
+    #                 # print(radius_table)
+    #                 print(delta_table)
+    #             class_index += 1
+    #             # print(true_delta_dict)
+    #             # new_dict = {}
+    #             # for k, v in true_delta_dict.items():
+    #             #     if 1 <= k <= 8 or 17 <= k <= 22:
+    #             #         # new_dict[k] = v
+    #             #         list_of_deltas.append([k, v])
+    #             #         # if k in list_of_deltas:
+    #             #         #     list_of_deltas[k] += v
+    #             #         # else:
+    #             #         #     list_of_deltas.append([k, v])
+    #             # # print(new_dict)
+    #             # print(list_of_deltas)
+    #             # # new_dict.clear()
+    #             # list_of_deltas.clear()
+    #             true_delta_dict = {}
+    #         # print(list_of_deltas)
