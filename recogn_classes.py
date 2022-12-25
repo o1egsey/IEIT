@@ -10,7 +10,7 @@ class RecognClass:
 
     def __init__(self, filename):
         self.filename = filename
-        self.delta = 10
+        self.delta = 5
         self.size = 50
         self.matrix = []
         self.binary_matrix = []
@@ -20,23 +20,24 @@ class RecognClass:
         self.etalon_vector = []
         self.perfect_radius = 0
         self.neighbor = 0
+        self.kfe = 0
         # self.neighbor_id = 0
 
     def image_to_matrix(self):
         """Convert image to matrix with values of pixel RGBs"""
-        image = Image.open(self.filename)
+        image = Image.open(self.filename).convert("L")
         alist = list(image.getdata())
         length = len(alist)
         self.matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
-        matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
-        new_matrix = []
-        for row in matrix:
-            new_row = []
-            for rgb in row:
-                new_row.append(round((rgb[0] + rgb[1] + rgb[2])/3))
-            new_matrix.append(new_row)
-        print(new_matrix)
-        return [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
+        # sub_matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
+        # matrix = []
+        # for row in sub_matrix:
+        #     new_row = []
+        #     for rgb in row:
+        #         new_row.append(round((rgb[0] + rgb[1] + rgb[2])/3))
+        #     matrix.append(new_row)
+        # self.matrix = matrix
+        return self.matrix
 
     def get_avg_vector(self):
         """Calculate average vector from matrix"""
