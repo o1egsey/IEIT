@@ -4,13 +4,14 @@
 
 from PIL import Image
 import numpy
+import os
 
 
 class RecognClass:
 
     def __init__(self, filename):
         self.filename = filename
-        self.delta = 5
+        self.delta = 18
         self.size = 50
         self.matrix = []
         self.binary_matrix = []
@@ -29,14 +30,6 @@ class RecognClass:
         alist = list(image.getdata())
         length = len(alist)
         self.matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
-        # sub_matrix = [alist[i * length // self.size: (i + 1) * length // self.size] for i in range(self.size)]
-        # matrix = []
-        # for row in sub_matrix:
-        #     new_row = []
-        #     for rgb in row:
-        #         new_row.append(round((rgb[0] + rgb[1] + rgb[2])/3))
-        #     matrix.append(new_row)
-        # self.matrix = matrix
         return self.matrix
 
     def get_avg_vector(self):
@@ -101,3 +94,20 @@ class RecognClass:
     def get_vector(self, row_id):
         """This function returns one row from binary matrix"""
         return self.binary_matrix[row_id]
+
+    def write_to_file(self):
+        """This method gets class name from filename, make .txt file and write there all necessary class data"""
+        head, tail = os.path.split(self.filename)
+        filename = tail.split('.')[0] + '_data.txt'
+
+        with open('output_data/' + filename, 'w') as f:
+            f.write(f"{self.filename} \n\n")
+            f.writelines(f"Base Matrix: \n {numpy.matrix(self.matrix)} \n\n")
+            f.write(f"AVG Vector: \n {self.avg_vector} \n\n")
+            f.write(f"Higher Limit: \n {self.higher_limit} \n\n")
+            f.write(f"Lower Limit: \n {self.lower_limit} \n\n")
+            f.write(f"Binary Matrix: \n {numpy.matrix(self.binary_matrix)} \n\n")
+            f.write(f"Etalon Vector : \n {self.etalon_vector} \n\n")
+            f.write(f"Neighbor file : \n {self.neighbor.filename} \n\n")
+            f.write(f"Perfect radius : \n {self.perfect_radius} \n\n")
+            f.write(f"KFE : \n {self.kfe} \n\n")
